@@ -27,7 +27,7 @@ const registerUser = async_handler(async(req, res)=>{
         throw new Error("User already exists")
     }
 
-    const user = await User.create(name, email, password);
+    const user = await User.create({name, email, password});
 
     if(user){
         res.status(201).json({
