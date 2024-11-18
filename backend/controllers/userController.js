@@ -1,7 +1,7 @@
 import async_handler from 'express-async-handler';
 import User from '../models/userModel.js';
-
 import mongoose from 'mongoose';
+import genToken from '../utils/genToken.js';
 
 // @desc Auth user/set token
 // @route POST /api/users/auth
@@ -30,6 +30,7 @@ const registerUser = async_handler(async(req, res)=>{
     const user = await User.create({name, email, password});
 
     if(user){
+        genToken(res, user._id)
         res.status(201).json({
             _id: user._id,
             name: user.name, 
