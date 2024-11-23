@@ -16,7 +16,7 @@ const app = express();
 app.use(express.json()); //allows to parse raw json 
 app.use(express.urlencoded({extended: true})); //allows to parse url encoded bodies
 
-app.use(cookieParser())
+app.use(cookieParser());
 
 app.use('/api/users', userRoutes);
 
