@@ -9,7 +9,22 @@ import genToken from '../utils/genToken.js';
 
 
 const authUser = async_handler(async(req, res)=>{
-    res.status(200).json({message: 'Auth user'});
+    const {email, password} = req.body;
+    const user = await User.findOne({email});
+
+    if(user && (await user.matchPasswords(password))){
+        genToken(res, user._id)
+        res.status(201).json({
+            _id: user._id,
+            name: user.name, 
+            email:user.email
+        })
+    }
+    else{
+        res.status(401);
+        throw new Error("Invalid email or password")
+    }
+
 })
 
 // @desc Register new user
@@ -48,7 +63,14 @@ const registerUser = async_handler(async(req, res)=>{
 // @access Public
 
 const logoutUser = async_handler(async(req, res)=>{
-    res.status(200).json({message: "Logout user"});
+    res.cookie('jwt', '', {
+        httpOnly: true,
+        expires: new Date(0)
+    })
+    res.status(200).json({message: "You are now logged out!"});
+
+
+
 })
 
 // @desc Get user profile
